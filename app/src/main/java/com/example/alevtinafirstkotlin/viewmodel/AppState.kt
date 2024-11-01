@@ -1,4 +1,4 @@
-package com.example.alevtinafirstkotlin.view
+package com.example.alevtinafirstkotlin.viewmodel
 
 import com.example.alevtinafirstkotlin.model.Weather
 

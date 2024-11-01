@@ -1,4 +1,4 @@
-package com.example.alevtinafirstkotlin.view
+package com.example.alevtinafirstkotlin.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.alevtinafirstkotlin.R
 import com.example.alevtinafirstkotlin.databinding.FragmentMainBinding
+import com.example.alevtinafirstkotlin.model.Weather
+import com.example.alevtinafirstkotlin.view.details.DetailsFragment
+import com.example.alevtinafirstkotlin.viewmodel.AppState
+import com.example.alevtinafirstkotlin.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
@@ -17,8 +21,21 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
-    private val adapter = MainFragmentAdapter()
     private var isDataSetRus: Boolean = true
+    private val adapter = MainFragmentAdapter(object : OnItemViewClickListener {
+        override fun onItemViewClick(weather: Weather) {
+            val manager = activity?.supportFragmentManager
+            if (manager != null) {
+                val bundle = Bundle()
+                bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, weather)
+                manager.beginTransaction()
+                    .add(R.id.container, DetailsFragment.newInstance(bundle))
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+        }
+    })
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +82,10 @@ class MainFragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    interface OnItemViewClickListener {
+        fun onItemViewClick(weather: Weather)
     }
 
     companion object {

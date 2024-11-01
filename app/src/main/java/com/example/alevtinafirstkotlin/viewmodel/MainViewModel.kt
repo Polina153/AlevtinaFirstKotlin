@@ -1,6 +1,5 @@
-package com.example.alevtinafirstkotlin.view
+package com.example.alevtinafirstkotlin.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.alevtinafirstkotlin.model.Repository
