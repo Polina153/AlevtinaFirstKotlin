@@ -38,76 +38,76 @@ class DetailsFragment : Fragment() {
     private fun renderData(data: Any) {
         Toast.makeText(context, data.toString(), Toast.LENGTH_LONG).show()
     }*/
-   /* override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-        //viewModel.getWeather()
-        viewModel.getWeatherFromLocalSource()
-    }
+    /* override fun onActivityCreated(savedInstanceState: Bundle?) {
+         super.onActivityCreated(savedInstanceState)
+         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+         viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
+         //viewModel.getWeather()
+         viewModel.getWeatherFromLocalSource()
+     }
 
-    private fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.Success -> {
-                    val weatherData = appState.weatherData
-                    binding.loadingLayout.visibility = View.GONE
-                    Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
-                }
+     private fun renderData(appState: AppState) {
+         when (appState) {
+             is AppState.Success -> {
+                     val weatherData = appState.weatherData
+                     binding.loadingLayout.visibility = View.GONE
+                     Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
+                 }
 
-                is AppState.Loading -> {
-                    binding.loadingLayout.visibility = View.VISIBLE
-                }
+                 is AppState.Loading -> {
+                     binding.loadingLayout.visibility = View.VISIBLE
+                 }
 
-                is AppState.Error -> {
-                    binding.loadingLayout.visibility = View.GONE
-                    Snackbar
-                        .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("Reload") { viewModel.getWeather() }
-                        .show()
-                }
-            is AppState.Success -> {
-                val weatherData = appState.weatherData
-                binding.loadingLayout.visibility = View.GONE
-                setData(weatherData)
-            }
+                 is AppState.Error -> {
+                     binding.loadingLayout.visibility = View.GONE
+                     Snackbar
+                         .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
+                         .setAction("Reload") { viewModel.getWeather() }
+                         .show()
+                 }
+             is AppState.Success -> {
+                 val weatherData = appState.weatherData
+                 binding.loadingLayout.visibility = View.GONE
+                 setData(weatherData)
+             }
 
-            is AppState.Loading -> {
-                binding.loadingLayout.visibility = View.VISIBLE
-            }
+             is AppState.Loading -> {
+                 binding.loadingLayout.visibility = View.VISIBLE
+             }
 
-            is AppState.Error -> {
-                binding.loadingLayout.visibility = View.GONE
-                Snackbar
-                    .make(binding.mainView, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.reload)) { viewModel.getWeatherFromLocalSource() }
-                    .show()
-            }
-        }
-    }
+             is AppState.Error -> {
+                 binding.loadingLayout.visibility = View.GONE
+                 Snackbar
+                     .make(binding.mainView, getString(R.string.error), Snackbar.LENGTH_INDEFINITE)
+                     .setAction(getString(R.string.reload)) { viewModel.getWeatherFromLocalSource() }
+                     .show()
+             }
+         }
+     }
 
-    private fun setData(weatherData: Weather) {
-        binding.cityName.text = weatherData.city.city
-        binding.cityCoordinates.text = String.format(
-            getString(R.string.city_coordinates),
-            weatherData.city.lat.toString(),
-            weatherData.city.lon.toString()
-        )
-        binding.temperatureValue.text = weatherData.temperature.toString()
-        binding.feelsLikeValue.text = weatherData.feelsLike.toString()
-    }*/
+     private fun setData(weatherData: Weather) {
+         binding.cityName.text = weatherData.city.city
+         binding.cityCoordinates.text = String.format(
+             getString(R.string.city_coordinates),
+             weatherData.city.lat.toString(),
+             weatherData.city.lon.toString()
+         )
+         binding.temperatureValue.text = weatherData.temperature.toString()
+         binding.feelsLikeValue.text = weatherData.feelsLike.toString()
+     }*/
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weather = arguments?.getParcelable<Weather>(BUNDLE_EXTRA)
-        if (weather != null) {
-            val city = weather.city
-            binding.cityName.text = city.city
-            binding.cityCoordinates.text = String.format(
-                getString(R.string.city_coordinates),
-                city.lat.toString(),
-                city.lon.toString()
-            )
-            binding.temperatureValue.text = weather.temperature.toString()
-            binding.feelsLikeValue.text = weather.feelsLike.toString()
+        arguments?.getParcelable<Weather>(BUNDLE_EXTRA)?.let { weather ->
+            weather.city.also { city ->
+                binding.cityName.text = city.city
+                binding.cityCoordinates.text = String.format(
+                    getString(R.string.city_coordinates),
+                    city.lat.toString(),
+                    city.lon.toString()
+                )
+                binding.temperatureValue.text = weather.temperature.toString()
+                binding.feelsLikeValue.text = weather.feelsLike.toString()
+            }
         }
     }
 
