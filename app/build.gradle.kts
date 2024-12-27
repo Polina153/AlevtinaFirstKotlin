@@ -42,7 +42,7 @@ android {
 
 dependencies {
 
-
+    implementation("com.squareup.okhttp3:okhttp:4.2.2")
 
     //Design
     implementation ("androidx.appcompat:appcompat:1.1.0")

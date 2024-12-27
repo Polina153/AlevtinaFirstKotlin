@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <service android:name=".view.experiments.MainService" />
+        <service android:name=".view.details.DetailsService" />
+
     </application>
 
 </manifest>
