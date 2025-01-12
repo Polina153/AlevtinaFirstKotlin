@@ -1,14 +1,21 @@
 package com.example.alevtinafirstkotlin.view
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alevtinafirstkotlin.R
 import com.example.alevtinafirstkotlin.databinding.ActivityMainBinding
+import com.example.alevtinafirstkotlin.view.experiments.ThreadsFragment
 import com.example.alevtinafirstkotlin.view.main.MainFragment
+import com.example.alevtinafirstkotlin.view.main.MyBroadcastReceiver
 
 class MainActivity : AppCompatActivity() {
 
+    private val receiver = MyBroadcastReceiver()//MainBroadcastReceiver()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitAllowingStateLoss()
         }
-
+        registerReceiver(receiver, IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED))
         /*var clickListener: View.OnClickListener = object : View.OnClickListener {
 
         @RequiresApi(Build.VERSION_CODES.N)
@@ -62,5 +69,29 @@ class MainActivity : AppCompatActivity() {
                    return reader.lines().collect(Collectors.joining("\n"))
                }
            }*/
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(receiver)
+        super.onDestroy()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_screen_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_threads -> {
+                supportFragmentManager.beginTransaction()
+                        .add(R.id.container, ThreadsFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
