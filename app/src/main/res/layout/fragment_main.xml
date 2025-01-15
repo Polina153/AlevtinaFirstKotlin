@@ -7,17 +7,6 @@
     android:layout_height="match_parent"
     >
 
-    <Space
-        android:id="@+id/spacer"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-
-    </Space>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainFragmentRecyclerView"
         android:layout_width="match_parent"
@@ -25,7 +14,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spacer"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
     <FrameLayout

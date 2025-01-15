@@ -62,7 +62,7 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
 
             // Вызывается при сбое в процессе запроса на сервер
             override fun onFailure(call: okhttp3.Call, e: IOException) {
-                //TODO() выполнила так,но при выключенном интернете не срабатывает, все просто висит и все
+                //TODO() при выключенном интернете не срабатывает, все просто висит и все
                 //Toast.makeText(applicationContext, e.printStackTrace().toString(), Toast.LENGTH_SHORT).show() - NullPointerException: Can't toast on a thread that has not called Looper.prepare() + E/AndroidRuntime: FATAL EXCEPTION: OkHttp Dispatcher
                 e.printStackTrace()
             }

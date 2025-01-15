@@ -20,10 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.getRoot()
         setContentView(view)
+        setSupportActionBar(binding.myToolbar)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
