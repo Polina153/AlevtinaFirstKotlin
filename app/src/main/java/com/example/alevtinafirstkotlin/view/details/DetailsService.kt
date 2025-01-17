@@ -19,7 +19,7 @@ const val LATITUDE_EXTRA = "Latitude"
 const val LONGITUDE_EXTRA = "Longitude"
 private const val REQUEST_GET = "GET"
 private const val REQUEST_TIMEOUT = 10000
-private const val MY_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
+/*const val MY_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"*/
 
 class DetailsService(name: String = "DetailService") : IntentService(name) {
 

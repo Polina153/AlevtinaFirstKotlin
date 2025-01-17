@@ -1,4 +1,8 @@
-package com.example.alevtinafirstkotlin.model
+package com.example.alevtinafirstkotlin.repository
+
+import com.example.alevtinafirstkotlin.model.Weather
+import com.example.alevtinafirstkotlin.model.getRussianCities
+import com.example.alevtinafirstkotlin.model.getWorldCities
 
 class RepositoryImpl : Repository {
 

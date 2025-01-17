@@ -1,5 +1,3 @@
-package ru.geekbrains.mysecondkotlinapp.view.experiments
-
 import android.app.IntentService
 import android.content.Intent
 import android.util.Log

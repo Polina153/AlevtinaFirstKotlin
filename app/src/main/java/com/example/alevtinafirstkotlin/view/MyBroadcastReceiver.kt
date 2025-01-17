@@ -1,4 +1,4 @@
-package com.example.alevtinafirstkotlin.view.main
+package com.example.alevtinafirstkotlin.view
 
 import android.content.BroadcastReceiver
 import android.content.Context

@@ -1,4 +1,6 @@
-package com.example.alevtinafirstkotlin.model
+package com.example.alevtinafirstkotlin.repository
+
+import com.example.alevtinafirstkotlin.model.Weather
 
 interface Repository {
     fun getWeatherFromServer(): Weather

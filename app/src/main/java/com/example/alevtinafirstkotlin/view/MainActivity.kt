@@ -5,13 +5,11 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alevtinafirstkotlin.R
 import com.example.alevtinafirstkotlin.databinding.ActivityMainBinding
 import com.example.alevtinafirstkotlin.view.experiments.ThreadsFragment
 import com.example.alevtinafirstkotlin.view.main.MainFragment
-import com.example.alevtinafirstkotlin.view.main.MyBroadcastReceiver
 
 class MainActivity : AppCompatActivity() {
 
@@ -85,9 +83,9 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_threads -> {
                 supportFragmentManager.beginTransaction()
-                        .add(R.id.container, ThreadsFragment.newInstance())
-                        .addToBackStack("")
-                        .commitAllowingStateLoss()
+                    .add(R.id.container, ThreadsFragment.newInstance())
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
                 true
             }
 

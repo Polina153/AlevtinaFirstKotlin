@@ -1,6 +1,8 @@
 package com.example.alevtinafirstkotlin.view.experiments
 
 
+import MAIN_SERVICE_STRING_EXTRA
+import MainService
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -16,8 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.alevtinafirstkotlin.R
 import com.example.alevtinafirstkotlin.databinding.FragmentThreadsBinding
-import ru.geekbrains.mysecondkotlinapp.view.experiments.MAIN_SERVICE_STRING_EXTRA
-import ru.geekbrains.mysecondkotlinapp.view.experiments.MainService
 import java.util.*
 import java.util.concurrent.TimeUnit
 

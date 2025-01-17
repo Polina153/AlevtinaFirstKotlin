@@ -4,32 +4,22 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.alevtinafirstkotlin.R
 import com.example.alevtinafirstkotlin.databinding.FragmentDetailsBinding
-import com.example.alevtinafirstkotlin.databinding.FragmentMainBinding
-import com.example.alevtinafirstkotlin.model.FactDTO
 import com.example.alevtinafirstkotlin.model.Weather
-import com.example.alevtinafirstkotlin.model.WeatherDTO
-import com.example.alevtinafirstkotlin.viewmodel.MainViewModel
-import com.google.gson.Gson
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.MalformedURLException
-import java.net.URL
-import java.util.stream.Collectors
-import javax.net.ssl.HttpsURLConnection
+import com.example.alevtinafirstkotlin.utils.showSnackBar
+import com.example.alevtinafirstkotlin.viewmodel.AppState
+import com.example.alevtinafirstkotlin.viewmodel.DetailsViewModel
 
-private const val MY_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
+const val MY_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
 
 const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
 const val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
@@ -55,6 +45,10 @@ class DetailsFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var weatherBundle: Weather
+
+    private val viewModel: DetailsViewModel by lazy { ViewModelProvider(this)[DetailsViewModel::class.java] }
+
+
     private val loadResultsReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.getStringExtra(DETAILS_LOAD_RESULT_EXTRA)) {
@@ -64,7 +58,7 @@ class DetailsFragment : Fragment() {
                 DETAILS_REQUEST_ERROR_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> TODO(PROCESS_ERROR)
                 DETAILS_URL_MALFORMED_EXTRA -> TODO(PROCESS_ERROR)
-                DETAILS_RESPONSE_SUCCESS_EXTRA -> renderData(
+                /*DETAILS_RESPONSE_SUCCESS_EXTRA -> renderData(
                     WeatherDTO(
                         FactDTO(
                             intent.getIntExtra(
@@ -76,7 +70,8 @@ class DetailsFragment : Fragment() {
                             )
                         )
                     )
-                )
+                )*/
+
                 else -> TODO(PROCESS_ERROR)
             }
         }
@@ -108,7 +103,8 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
-        getWeather()
+        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
+        viewModel.getWeatherFromRemoteSource(MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}")
     }
 
     private fun getWeather() {
@@ -128,30 +124,66 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun renderData(weatherDTO: WeatherDTO) {
-        binding.mainView.visibility = View.VISIBLE
-        binding.loadingLayout.visibility = View.GONE
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Success -> {
+                binding.mainView.visibility = View.VISIBLE
+                binding.loadingLayout.visibility = View.GONE
+                setWeather(appState.weatherData[0])
+            }
 
-        val fact = weatherDTO.fact
-        val temp = fact!!.temp
-        val feelsLike = fact.feels_like
-        val condition = fact.condition
-        if (temp == TEMP_INVALID || feelsLike == FEELS_LIKE_INVALID || condition == null) {
-            TODO(PROCESS_ERROR)
-        } else {
-            val city = weatherBundle.city
-            binding.cityName.text = city.city
-            binding.cityCoordinates.text = String.format(
-                getString(R.string.city_coordinates),
-                city.lat.toString(),
-                city.lon.toString()
-            )
-            binding.temperatureValue.text = temp.toString()
-            binding.feelsLikeValue.text = feelsLike.toString()
-            binding.weatherCondition.text = condition
+            is AppState.Loading -> {
+                binding.mainView.visibility = View.GONE
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+
+            is AppState.Error -> {
+                binding.mainView.visibility = View.VISIBLE
+                binding.loadingLayout.visibility = View.GONE
+                binding.mainView.showSnackBar(
+                    getString(R.string.error),
+                    getString(R.string.reload),
+                    { viewModel.getWeatherFromRemoteSource(MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}") })
+            }
         }
     }
 
+    private fun setWeather(weather: Weather) {
+        val city = weatherBundle.city
+        binding.cityName.text = city.city
+        binding.cityCoordinates.text = String.format(
+            getString(R.string.city_coordinates),
+            city.lat.toString(),
+            city.lon.toString()
+        )
+        binding.temperatureValue.text = weather.temperature.toString()
+        binding.feelsLikeValue.text = weather.feelsLike.toString()
+        binding.weatherCondition.text = weather.condition
+    }
+
+    /*  binding.mainView.visibility = View.VISIBLE
+      binding.loadingLayout.visibility = View.GONE
+
+      val fact = weatherDTO.fact
+      val temp = fact!!.temp
+      val feelsLike = fact.feels_like
+      val condition = fact.condition
+      if (temp == TEMP_INVALID || feelsLike == FEELS_LIKE_INVALID || condition == null) {
+          TODO(PROCESS_ERROR)
+      } else {
+          val city = weatherBundle.city
+          binding.cityName.text = city.city
+          binding.cityCoordinates.text = String.format(
+              getString(R.string.city_coordinates),
+              city.lat.toString(),
+              city.lon.toString()
+          )
+          binding.temperatureValue.text = temp.toString()
+          binding.feelsLikeValue.text = feelsLike.toString()
+          binding.weatherCondition.text = condition
+      }
+  }
+*/
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -170,35 +202,35 @@ class DetailsFragment : Fragment() {
 }
 
 
-   /* private var _binding: FragmentDetailsBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var weatherBundle: Weather
-    private val onLoadListener: WeatherLoader.WeatherLoaderListener =
-        object : WeatherLoader.WeatherLoaderListener {
+/* private var _binding: FragmentDetailsBinding? = null
+ private val binding get() = _binding!!
+ private lateinit var weatherBundle: Weather
+ private val onLoadListener: WeatherLoader.WeatherLoaderListener =
+     object : WeatherLoader.WeatherLoaderListener {
 
-            override fun onLoaded(weatherDTO: WeatherDTO) {
-                displayWeather(weatherDTO)
-            }
+         override fun onLoaded(weatherDTO: WeatherDTO) {
+             displayWeather(weatherDTO)
+         }
 
-            override fun onFailed(throwable: Throwable) {
-                //Обработка ошибки
-            }
-        }
+         override fun onFailed(throwable: Throwable) {
+             //Обработка ошибки
+         }
+     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+     super.onCreate(savedInstanceState)
+ }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        return binding.getRoot()
-    }
+ override fun onCreateView(
+     inflater: LayoutInflater, container: ViewGroup?,
+     savedInstanceState: Bundle?
+ ): View {
+     _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+     return binding.getRoot()
+ }
 
-    *//*override fun onActivityCreated(savedInstanceState: Bundle?) {
+ *//*override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         val observer = Observer<Any> { renderData(it) }

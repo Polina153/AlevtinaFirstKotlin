@@ -2,8 +2,8 @@ package com.example.alevtinafirstkotlin.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alevtinafirstkotlin.model.Repository
-import com.example.alevtinafirstkotlin.model.RepositoryImpl
+import com.example.alevtinafirstkotlin.repository.Repository
+import com.example.alevtinafirstkotlin.repository.RepositoryImpl
 import java.lang.Thread.sleep
 
 /*class MainViewModel(private val liveDataToObserve: MutableLiveData<Any> = MutableLiveData()) :
