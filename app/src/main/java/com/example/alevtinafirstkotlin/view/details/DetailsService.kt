@@ -6,6 +6,7 @@ import android.os.Build
 import android.telecom.Call
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.alevtinafirstkotlin.BuildConfig
 import com.example.alevtinafirstkotlin.model.WeatherDTO
 import com.google.gson.Gson
 import okhttp3.Callback
@@ -44,7 +45,7 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
     private fun loadWeather(latitude: String, longitude: String) {
         val client = OkHttpClient() // Клиент
         val builder: Request.Builder = Request.Builder() // Создаём строителя запроса
-        builder.header("X-Yandex-API-Key", MY_API_KEY) // Создаём заголовок запроса
+        builder.header("X-Yandex-API-Key", BuildConfig.MY_API_KEY) // Создаём заголовок запроса
         builder.url("https://api.weather.yandex.ru/v2/informers?lat=${latitude}&lon=${longitude}") // Формируем URL
         val request: Request = builder.build() // Создаём запрос
         val call: okhttp3.Call = client.newCall(request) // Ставим запрос в очередь и отправляем

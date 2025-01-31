@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.example.alevtinafirstkotlin.BuildConfig
 import com.example.alevtinafirstkotlin.model.WeatherDTO
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -13,7 +14,7 @@ import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
-private const val YOUR_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
+//private const val YOUR_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
 
 class WeatherLoader(
     private val listener: WeatherLoaderListener,
@@ -34,7 +35,7 @@ class WeatherLoader(
                     urlConnection.requestMethod = "GET"
                     urlConnection.addRequestProperty(
                         "X-Yandex-API-Key",
-                        YOUR_API_KEY
+                        BuildConfig.MY_API_KEY
                     )
                     urlConnection.readTimeout = 10000
                     val bufferedReader =

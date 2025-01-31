@@ -19,7 +19,7 @@ import com.example.alevtinafirstkotlin.utils.showSnackBar
 import com.example.alevtinafirstkotlin.viewmodel.AppState
 import com.example.alevtinafirstkotlin.viewmodel.DetailsViewModel
 
-const val MY_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
+//const val MY_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
 
 const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
 const val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"

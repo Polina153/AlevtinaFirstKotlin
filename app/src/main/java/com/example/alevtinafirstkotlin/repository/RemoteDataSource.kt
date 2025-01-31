@@ -12,7 +12,6 @@ const val REQUEST_API_KEY = "X-Yandex-API-Key"
 class RemoteDataSource {
 
     fun getWeatherDetails(requestLink: String, callback: Callback) {
-        val key =  BuildConfig.MY_API_KEY
         val builder: Request.Builder = Request.Builder().apply {
             header(REQUEST_API_KEY, BuildConfig.MY_API_KEY)
             url(requestLink)
