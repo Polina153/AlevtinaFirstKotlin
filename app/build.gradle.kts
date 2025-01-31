@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,7 +21,25 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    //val key: String = gradleLocalProperties(rootDir, providers).getProperty("MY_API_KEY")
+    val myProperties = Properties().apply {
+        load(FileInputStream(File(rootProject.rootDir, "apikey.properties")))
+    }
+    val key = myProperties.getProperty("MY_API_KEY")
+
+    //android.buildFeatures.buildConfig = true
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
+        getByName("debug") {
+            buildConfigField("String", "MY_API_KEY", key)
+        }
+        getByName("release") {
+            buildConfigField("String", "MY_API_KEY", key)
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -27,6 +48,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -45,17 +67,17 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.2.2")
 
     //Design
-    implementation ("androidx.appcompat:appcompat:1.1.0")
-    implementation ("com.google.android.material:material:1.1.0")
-    implementation ("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("com.google.android.material:material:1.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 
     //Kotlin
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
-    implementation ("androidx.core:core-ktx:1.3.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+    implementation("androidx.core:core-ktx:1.3.0")
 
     //ViewModel + LiveData
-    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
 
 
 
@@ -71,6 +93,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-   //GSON
-    implementation (libs.gson)
+    //GSON
+    implementation(libs.gson)
 }
