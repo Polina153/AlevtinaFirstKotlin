@@ -18,6 +18,7 @@ import com.example.alevtinafirstkotlin.model.Weather
 import com.example.alevtinafirstkotlin.utils.showSnackBar
 import com.example.alevtinafirstkotlin.viewmodel.AppState
 import com.example.alevtinafirstkotlin.viewmodel.DetailsViewModel
+import com.squareup.picasso.Picasso
 
 //const val MY_API_KEY = "8df85a2d-de57-4e99-be0f-4d7cb50a67ef"
 
@@ -159,6 +160,11 @@ class DetailsFragment : Fragment() {
         binding.temperatureValue.text = weather.temperature.toString()
         binding.feelsLikeValue.text = weather.feelsLike.toString()
         binding.weatherCondition.text = weather.condition
+
+        Picasso
+            .get()
+            .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+            .into(binding.headerIcon)
     }
 
     /*  binding.mainView.visibility = View.VISIBLE
