@@ -20,6 +20,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     //val key: String = gradleLocalProperties(rootDir, providers).getProperty("MY_API_KEY")
@@ -63,14 +65,31 @@ android {
     }
 }
 
+/*//allprojects {
+    repositories {
+        maven { url = uri("https://jitpack.io") }
+    }
+//}*/
+
 dependencies {
 
-    implementation ("com.squareup.picasso:picasso:2.71828")
+   /* implementation ("com.github.User:Repo:Tag")
+
+    //GlideToVectorYou
+    implementation("com.github.corouteam:GlideToVectorYou:v2.0.0")*/
+
+    implementation("io.coil-kt.coil3:coil:3.0.4")
+    implementation("io.coil-kt.coil3:coil-svg:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+
+    //implementation("com.android.support:appcompat-v7:23.2.0")
+
+    implementation("com.squareup.picasso:picasso:2.71828")
 
     implementation("com.squareup.okhttp3:okhttp:4.2.2")
 
     //Design
-    implementation("androidx.appcompat:appcompat:1.1.0")
+    //implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("com.google.android.material:material:1.1.0")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 

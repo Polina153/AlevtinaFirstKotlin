@@ -1,10 +1,12 @@
 package com.example.alevtinafirstkotlin.view.details
 
 import android.content.BroadcastReceiver
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import coil3.imageLoader
+import coil3.load
+import coil3.request.ImageRequest
+import coil3.svg.SvgDecoder
+import coil3.toBitmap
 import com.example.alevtinafirstkotlin.R
 import com.example.alevtinafirstkotlin.databinding.FragmentDetailsBinding
 import com.example.alevtinafirstkotlin.model.Weather
@@ -165,47 +172,79 @@ class DetailsFragment : Fragment() {
             .get()
             .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
             .into(binding.headerIcon)
-    }
 
-    /*  binding.mainView.visibility = View.VISIBLE
-      binding.loadingLayout.visibility = View.GONE
-
-      val fact = weatherDTO.fact
-      val temp = fact!!.temp
-      val feelsLike = fact.feels_like
-      val condition = fact.condition
-      if (temp == TEMP_INVALID || feelsLike == FEELS_LIKE_INVALID || condition == null) {
-          TODO(PROCESS_ERROR)
-      } else {
-          val city = weatherBundle.city
-          binding.cityName.text = city.city
-          binding.cityCoordinates.text = String.format(
-              getString(R.string.city_coordinates),
-              city.lat.toString(),
-              city.lon.toString()
-          )
-          binding.temperatureValue.text = temp.toString()
-          binding.feelsLikeValue.text = feelsLike.toString()
-          binding.weatherCondition.text = condition
-      }
-  }
-*/
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    companion object {
-
-        const val BUNDLE_EXTRA = "weather"
-
-        fun newInstance(bundle: Bundle): DetailsFragment {
-            val fragment = DetailsFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
+        weather.icon?.let {
+            /* binding.weatherIcon.load("https://yastatic.net/weather/i/icons/blueye/color/svg/${it}.svg") {
+                 decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+             }*/
+            val request = ImageRequest.Builder(requireContext())
+                .data("https://yastatic.net/weather/i/icons/blueye/color/svg/${it}.svg")
+                .target(
+                    onStart = {
+                        Log.d(TAG, "Coil loader started.")
+                    },
+                    onSuccess = { result ->
+                        Log.e(TAG, "Coil loader success.")
+                        binding.weatherIcon.setImageBitmap(result.toBitmap())
+                    },
+                    onError = {
+                        Log.e(TAG, "Coil loading error")
+                    }
+                )
+                .build()
+            requireContext().imageLoader.enqueue(request)
+           /* binding.weatherIcon.load(request) {
+                decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+            */
+            /* GlideToVectorYou.justLoadImage(
+                 activity,
+                 Uri.parse("https://yastatic.net/weather/i/icons/blueye/color/svg/${it}.svg"),
+                 binding.weatherIcon
+             )*//*
+        }*/
     }
 }
+
+override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
+}
+
+companion object {
+
+    const val BUNDLE_EXTRA: String = "weather"
+
+    fun newInstance(bundle: Bundle): DetailsFragment {
+        val fragment = DetailsFragment()
+        fragment.arguments = bundle
+        return fragment
+    }
+}
+}
+
+/*  binding.mainView.visibility = View.VISIBLE
+  binding.loadingLayout.visibility = View.GONE
+
+  val fact = weatherDTO.fact
+  val temp = fact!!.temp
+  val feelsLike = fact.feels_like
+  val condition = fact.condition
+  if (temp == TEMP_INVALID || feelsLike == FEELS_LIKE_INVALID || condition == null) {
+      TODO(PROCESS_ERROR)
+  } else {
+      val city = weatherBundle.city
+      binding.cityName.text = city.city
+      binding.cityCoordinates.text = String.format(
+          getString(R.string.city_coordinates),
+          city.lat.toString(),
+          city.lon.toString()
+      )
+      binding.temperatureValue.text = temp.toString()
+      binding.feelsLikeValue.text = feelsLike.toString()
+      binding.weatherCondition.text = condition
+  }
+}
+*/
 
 
 /* private var _binding: FragmentDetailsBinding? = null
