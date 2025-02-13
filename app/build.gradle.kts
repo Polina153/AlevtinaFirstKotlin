@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -6,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -73,10 +73,16 @@ android {
 
 dependencies {
 
-   /* implementation ("com.github.User:Repo:Tag")
+    /* implementation ("com.github.User:Repo:Tag")
 
-    //GlideToVectorYou
-    implementation("com.github.corouteam:GlideToVectorYou:v2.0.0")*/
+     //GlideToVectorYou
+     implementation("com.github.corouteam:GlideToVectorYou:v2.0.0")*/
+
+    //Room
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 
     implementation("io.coil-kt.coil3:coil:3.0.4")
     implementation("io.coil-kt.coil3:coil-svg:3.0.4")
