@@ -21,6 +21,7 @@ import coil3.svg.SvgDecoder
 import coil3.toBitmap
 import com.example.alevtinafirstkotlin.R
 import com.example.alevtinafirstkotlin.databinding.FragmentDetailsBinding
+import com.example.alevtinafirstkotlin.model.City
 import com.example.alevtinafirstkotlin.model.Weather
 import com.example.alevtinafirstkotlin.utils.showSnackBar
 import com.example.alevtinafirstkotlin.viewmodel.AppState
@@ -111,8 +112,9 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         weatherBundle = arguments?.getParcelable(BUNDLE_EXTRA) ?: Weather()
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer { renderData(it) })
-        viewModel.getWeatherFromRemoteSource(MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}")
+        //viewModel.getWeatherFromRemoteSource(MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}")
+        viewModel.detailsLiveData.observe(viewLifecycleOwner, { renderData(it) })
+        viewModel.getWeatherFromRemoteSource(weatherBundle.city.lat, weatherBundle.city.lon)
     }
 
     private fun getWeather() {
@@ -151,13 +153,20 @@ class DetailsFragment : Fragment() {
                 binding.mainView.showSnackBar(
                     getString(R.string.error),
                     getString(R.string.reload),
-                    { viewModel.getWeatherFromRemoteSource(MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}") })
+                    //{ viewModel.getWeatherFromRemoteSource(MAIN_LINK + "lat=${weatherBundle.city.lat}&lon=${weatherBundle.city.lon}") })
+                    {
+                        viewModel.getWeatherFromRemoteSource(
+                            weatherBundle.city.lat,
+                            weatherBundle.city.lon
+                        )
+                    })
             }
         }
     }
 
     private fun setWeather(weather: Weather) {
         val city = weatherBundle.city
+        saveCity(city, weather)
         binding.cityName.text = city.city
         binding.cityCoordinates.text = String.format(
             getString(R.string.city_coordinates),
@@ -193,33 +202,48 @@ class DetailsFragment : Fragment() {
                 )
                 .build()
             requireContext().imageLoader.enqueue(request)
-           /* binding.weatherIcon.load(request) {
-                decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
-            */
+            /* binding.weatherIcon.load(request) {
+                 decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+             */
             /* GlideToVectorYou.justLoadImage(
                  activity,
                  Uri.parse("https://yastatic.net/weather/i/icons/blueye/color/svg/${it}.svg"),
                  binding.weatherIcon
              )*//*
         }*/
+        }
     }
-}
 
-override fun onDestroyView() {
-    super.onDestroyView()
-    _binding = null
-}
-
-companion object {
-
-    const val BUNDLE_EXTRA: String = "weather"
-
-    fun newInstance(bundle: Bundle): DetailsFragment {
-        val fragment = DetailsFragment()
-        fragment.arguments = bundle
-        return fragment
+    private fun saveCity(
+        city: City,
+        weather: Weather
+    ) {
+        viewModel.saveCityToDB(
+            Weather(
+                city,
+                weather.temperature,
+                weather.feelsLike,
+                weather.condition
+            )
+        )
     }
-}
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+
+        const val BUNDLE_EXTRA: String = "weather"
+
+        fun newInstance(bundle: Bundle): DetailsFragment {
+            val fragment = DetailsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
 }
 
 /*  binding.mainView.visibility = View.VISIBLE

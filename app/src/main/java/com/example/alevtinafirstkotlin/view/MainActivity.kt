@@ -89,6 +89,15 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.menu_history -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .add(R.id.container, HistoryFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

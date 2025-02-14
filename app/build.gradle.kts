@@ -65,19 +65,12 @@ android {
     }
 }
 
-/*//allprojects {
-    repositories {
-        maven { url = uri("https://jitpack.io") }
-    }
-//}*/
-
 dependencies {
 
-    /* implementation ("com.github.User:Repo:Tag")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.5.0")
 
-     //GlideToVectorYou
-     implementation("com.github.corouteam:GlideToVectorYou:v2.0.0")*/
-
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
     //Room
     val room_version = "2.6.1"
 
